@@ -97,3 +97,26 @@ Fifth  today I find that my LDSPrefetcher prepare a prefetch by using TLB,
        Having read the source code, I find it difficult to change the program to mimics the
        accurate cycle hehavior of cache access.
   
+/***********today is 2016/7/5 pm 18:11
+ * there are some qusetiones for accessing DTLB
+ * 1, when can LDS-Prefetcher use the DTLB to generate a lds prefech?  
+ *    answer: may be in the idle cycle of DTLB 
+ * 
+ * 2, The access of priority between demand L1 access and LDSP to DTLB?
+ *    answer:
+ * 
+ * 3, what if a LDS_prefetcher is in a more critical path than demand access while LSQunit recently dominate the DTLB? we need to raise up the priority of LDS Prefetchcompared 
+ *    to demand access. Now I think I need a counter to track the past access history to determine which one can use the DTLB.
+ * 
+ * 4, we should take L2 request queue condition into account of determination in terms of urgency of launching a LDS Prefetch.
+ *    eg: it will be less useful to req a DTLB access for a lds prefetch in a upgrade mode if L2 request queue is recently full.
+ * 
+ * 5, IS it necessary to filter the cache line request, which contians useless pointer data for future prefetch.
+ *    answer: It depend on the accuracy of direction predictor.
+ *            If the recent accuracy of the LDSP is higher than a therhold, just turn on filterring; otherwise turn off it!.
+ * 
+ * 
+ *  I think I need to design a lab to observe the element locations of  abig structure, and try to find out the regular pattern.
+ * 
+ 
+  
