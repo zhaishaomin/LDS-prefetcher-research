@@ -40,8 +40,11 @@ fourth, how can i launch a LDSPrefetch in the getNEXTMSHR() functon of
         }   
 
    changed:// If we have a miss queue slot, we can try a prefetch from stride prefetcher or LDS prefetcher
-        PacketPtr pkt1 = strideprefetcher->getPacket();//getpacket() now should only return a pkt and left pop_work for later process
-        PacketPtr pkt2 = ldsprefetcher->getPacket();//getpacket() now should only return a pkt and left pop_work for later process
+        PacketPtr pkt1 = strideprefetcher->getPacket();
+        //getpacket() now should only return a pkt and left pop_work for later process
+        PacketPtr pkt2 = ldsprefetcher->getPacket();
+        //getpacket() now should only return a pkt and left pop_work for later process
+        
         //added code is:
         if (pkt2) {
 
@@ -98,6 +101,8 @@ Fifth  today I find that my LDSPrefetcher prepare a prefetch by using TLB,
        accurate cycle hehavior of cache access.
   
 /***********today is 2016/7/5 pm 18:11
+ *         Mainly about interface between LDSP and DTLB
+ * 
  * there are some qusetiones for accessing DTLB
  * 1, when can LDS-Prefetcher use the DTLB to generate a lds prefech?  
  *    answer: may be in the idle cycle of DTLB 
@@ -105,18 +110,51 @@ Fifth  today I find that my LDSPrefetcher prepare a prefetch by using TLB,
  * 2, The access of priority between demand L1 access and LDSP to DTLB?
  *    answer:
  * 
- * 3, what if a LDS_prefetcher is in a more critical path than demand access while LSQunit recently dominate the DTLB? we need to raise up the priority of LDS Prefetchcompared 
- *    to demand access. Now I think I need a counter to track the past access history to determine which one can use the DTLB.
+ * 3, what if a LDS_prefetcher is in a more critical path than demand access 
+ *    while LSQunit recently dominate the DTLB? we need to raise up the priority 
+ *    of LDS Prefetchcompared to demand access. Now I think I need a counter to 
+ *    track the past access history to determine which one can use the DTLB.
  * 
- * 4, we should take L2 request queue condition into account of determination in terms of urgency of launching a LDS Prefetch.
- *    eg: it will be less useful to req a DTLB access for a lds prefetch in a upgrade mode if L2 request queue is recently full.
+ * 4, we should take L2 request queue condition into account of determination 
+ *    in terms of urgency of launching a LDS Prefetch.
+ * 
+ *    eg: it will be less useful to req a DTLB access for a lds prefetch in a upgrade mode
+ *        if L2 request queue is recently full.
  * 
  * 5, IS it necessary to filter the cache line request, which contians useless pointer data for future prefetch.
  *    answer: It depend on the accuracy of direction predictor.
  *            If the recent accuracy of the LDSP is higher than a therhold, just turn on filterring; otherwise turn off it!.
  * 
  * 
- *  I think I need to design a lab to observe the element locations of  abig structure, and try to find out the regular pattern.
+ *  I think I need to design a lab to observe the element locations of a big structure, and try to find out the regular pattern.
  * 
  
-  
+ Solution! 
+ /*********2016/7/5  pm 22:34
+  * There will be a list of interfaces between LDS_prefetcher and original GEM5
+  * interface 1, static information such as inst type, src reg id, imm value, dest reg id.
+  *              The prolem is how can I get imm value from dyn_inst.
+  *              solution 1: imm=inst->paddr-inst->src_reg_value.
+  *              solution 2: create a imm filed in the staticinst class.
+  * 
+  * interface 2, when can I launch a addr translation for pointer info for LDS_prefetcher pattern using DTLB.
+  *              case 1: There are enough idle cycles for LDSP to do a few of addr translations.
+  *              case 2: There are few of idle cycles for LDSP to do any addr translations but the load-to-use 
+  *                      of LDS data is critical, so we need to upgrade the priority of pointer addr translation.
+  * 
+  * interface 3, between prefetcher and L1Data cache ,which is used to train pattern table
+  *              case 1: the active pointer infos can be extrated from L1 data cache directly, L1 cache hit.
+  *                      ****This case can be implemented in satisfied block of recvTimingreq(  ) of cache class.
+  *              case 2: the active pointer infos is evicted from L1 data cache before, so L1 cache miss;
+  *                      but once missed data return from lower level cache, data will be redirected to pattern table(LDSP).
+  *                      ****This case should be handled after handfill action or simutaneously in 
+  *                          recvTimingresp(  ) of cache class.
+  * interface 4, between prefetcher and commit state, which is provide commited load infos for LDSP to
+  *              update direction predictor and pattern table.              
+  *              solution: add a pointer to commit state or just use the info from dyninst.
+  * 
+  * interface 5, between MSHR ,L2 request queue condition and prefetcher.
+  *              solution: try to figure out what action should occurred in MSHR and Prefetch.
+  *                        need to figure out raletionship between MSHR and stride_prefetcher.
+  ***********PM 23:20       
+    
