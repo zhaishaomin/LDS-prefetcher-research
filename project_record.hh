@@ -149,12 +149,22 @@ Fifth  today I find that my LDSPrefetcher prepare a prefetch by using TLB,
   *                      but once missed data return from lower level cache, data will be redirected to pattern table(LDSP).
   *                      ****This case should be handled after handfill action or simutaneously in 
   *                          recvTimingresp(  ) of cache class.
+  * 
   * interface 4, between prefetcher and commit state, which is provide commited load infos for LDSP to
-  *              update direction predictor and pattern table.              
-  *              solution: add a pointer to commit state or just use the info from dyninst.
+  *              update direction predictor and pattern table.    
+  * 
+  *              solution: add a pointer of LDSP to commit state. When some loads are commited from ROB,
+  *                        it's the right time to use the loads to update LDSP.
+  * 
+  *              Eg:  insert the code below into line 1324 of commit_impl.hh in commithead(  ).
+  * 
+  *                    // If this was a load, call ldsp->update_pt(  ).
+  *                        if (head_inst->isLoad())        
+  *                             ldsp->update_pt(head_inst);
   * 
   * interface 5, between MSHR ,L2 request queue condition and prefetcher.
   *              solution: try to figure out what action should occurred in MSHR and Prefetch.
   *                        need to figure out raletionship between MSHR and stride_prefetcher.
-  ***********PM 23:20       
+  * 
+  * end by PM 23:36
     
