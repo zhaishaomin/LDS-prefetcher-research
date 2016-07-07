@@ -125,3 +125,14 @@ void Pattern_Table::NewsFromL2(DynInstPtr &inst)
 
 
 }
+
+PacketPtr  Pattern_Table::get_ptr_infos()
+{  
+     if（!pointer->addr_valid&&pointer->pref）
+     {
+          PacketPtr ptr_access=new packet();
+          pointer->pending=1;
+         // pointer->accessIsssued=1;
+     }
+     return ptr_access;
+}
