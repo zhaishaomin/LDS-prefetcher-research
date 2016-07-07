@@ -55,14 +55,17 @@ class Pattern_Table
 
                        // value of the pointer,also the addr of the next node
                        int addr;
-
+                   
                        // offset compared to the first addr in the structure
                        int offset;
 
                        // prefetch or not ,used to save info for direction predictor or
                        // guide prefetcher to decide whether to prefetch or not
                        bool  pref;
-
+                       
+                       // Is the addr valid or not
+                       bool addr_bool;
+                       
                        // valid or not
                        bool valid;
                 };
