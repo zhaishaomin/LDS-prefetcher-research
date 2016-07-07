@@ -68,6 +68,10 @@ class Pattern_Table
                        
                        // valid or not
                        bool valid;
+                       
+                       // the ptr infos access is pending
+                       bool pending;
+            
                 };
 
                struct PT_entry{
@@ -86,6 +90,8 @@ class Pattern_Table
             lds_prefetcher *ldsp;
             // used to allocate anew entry for the potential lds 
             void allocNewEntry();
+            
+
      public:
             // insts after decode stage will access Pattern Table to update something in the corresponding entry
             // such as allocating a new entry, write the potential pointer and its dest reg and offset and so on.
@@ -97,6 +103,8 @@ class Pattern_Table
             // pattern table should update the addr of useful pointer and do aggresive lds prefetches by using returned L2 data 
             void NewsFromL2(DynInstPtr &inst);
             
+            // issue a pointer infos access to data cache after a DTLB access requiried by LDSP
+            Packetptr get_ptr_infos();
             
                         
 };
