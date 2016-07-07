@@ -132,6 +132,8 @@ Fifth  today I find that my LDSPrefetcher prepare a prefetch by using TLB,
  Solution! 
  /*********2016/7/5  pm 22:34
   * There will be a list of interfaces between LDS_prefetcher and original GEM5
+  *
+  *
   * interface 1, static information such as inst type, src reg id, imm value, dest reg id.
   *              The prolem is how can I get imm value from dyn_inst.
   *              solution 1: imm=inst->paddr-inst->src_reg_value.
@@ -145,6 +147,10 @@ Fifth  today I find that my LDSPrefetcher prepare a prefetch by using TLB,
   * interface 3, between prefetcher and L1Data cache ,which is used to train pattern table
   *              case 1: the active pointer infos can be extrated from L1 data cache directly, L1 cache hit.
   *                      ****This case can be implemented in satisfied block of recvTimingreq(  ) of cache class.
+  *                case 1.1 :the pointer infos can be get from the same cache line via data access of the same linked structure.
+  *                
+  *                case 1.2 :the pointer infos only should be acquiried via specific data access to the cache line.
+  *                
   *              case 2: the active pointer infos is evicted from L1 data cache before, so L1 cache miss;
   *                      but once missed data return from lower level cache, data will be redirected to pattern table(LDSP).
   *                      ****This case should be handled after handfill action or simutaneously in 
@@ -168,3 +174,18 @@ Fifth  today I find that my LDSPrefetcher prepare a prefetch by using TLB,
   * 
   * end by PM 23:36
     
+
+
+/********************* today is 2016/7/7 , now PM 22:39******************************/
+About interface 2&3
+
+Note!  
+
+The interface between data cache and LDS_prefetcher should be optimized like followings
+
+Case 1: the data cache is plpelined. eg: First DTLB access and tag access, then data access.
+        In this case, the LDSP can issue a pointer infos access to data cache after a DTLB access requiried by LDSP.
+Case 2: the data cache is one cycle latency.
+        In this case, the LDSP can issue a pointer infos access and DTLB access.
+(eg: intel core i7 four cycles latencies, pipelined)
+        
