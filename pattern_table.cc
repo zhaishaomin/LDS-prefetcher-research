@@ -136,3 +136,29 @@ PacketPtr  Pattern_Table::get_ptr_infos()
      }
      return ptr_access;
 }
+
+PacketPtr Pattern_Table::calculatePref()
+{
+     list<PT_entry>::Iterator pt_iter;
+
+     for(pt_iter=pattern_table.begin();pt_iter!=pattern_table.begin();pt_iter++
+     {
+          if(pt_iter->PT_entry_valid)
+          for(int i=0;i<pt_maxnumpointers;i++)
+          {
+             PointerField * p=pt_iter->pointer[i];
+             //we should issue a LDS prefetch 
+             //if 1. this pointer filed is valid;
+             //   2. the physical addr is ready;
+             //   3. this is the first time to issue a pref.
+             //   4. the pointer is predicted to prefetch a LDS. 
+             if(p->valid&&p->addr_valid&&(!p->pref_issued)&&p->pref)
+              {
+                  p->pref_issued=ture;
+                  
+                  // here we should add some new metrics to original packet.
+                  Packet  * pkt=new Packet();
+                  return  pkt;
+              }
+     }
+}
