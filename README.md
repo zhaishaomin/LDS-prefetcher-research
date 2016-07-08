@@ -1,5 +1,5 @@
 # LDS-prefetcher-research
-This project is major in design a new algorithm mainly improving load_to_use of linked data structure in high performance procesor 
+This project is major in design a new algorithm mainly reducing load_to_use latency of linked data structure in high performance procesor 
 
 Backgroud:
      In recent years, people find that the long latency can't be covered by common stride_based prefetcher, 
