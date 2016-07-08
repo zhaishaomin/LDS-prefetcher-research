@@ -64,14 +64,16 @@ class Pattern_Table
                        bool  pref;
                        
                        // Is the addr valid or not
-                       bool addr_bool;
+                       bool addr_valid;
                        
                        // valid or not
                        bool valid;
                        
                        // the ptr infos access is pending
                        bool pending;
-            
+                    
+                       // the pref has been issued
+                       bool pref_issued;
                 };
 
                struct PT_entry{
@@ -105,6 +107,9 @@ class Pattern_Table
             
             // issue a pointer infos access to data cache after a DTLB access requiried by LDSP
             Packetptr get_ptr_infos();
+            
+            //calculate packet for future LDS prefetch
+            PacketPtr calculatePref();
             
                         
 };
