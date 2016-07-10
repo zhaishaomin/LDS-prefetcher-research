@@ -111,6 +111,26 @@ class Pattern_Table
             //calculate packet for future LDS prefetch
             PacketPtr calculatePref();
             
-                        
+            // update pointer filed infos if it find a fake pointer or potential pointer in the allocated entry
+            void updatePtrItem();
+            
+            // update physical addr if DTLB is finished!
+            void updatePaddr();
+            
+            // if we need to access DTLB to translate the virtual addr to physical addr
+            bool needAcesTLB();
+            
+            // if we need to translate vaadr to paddr via DTLB
+            void AccessTLB();
+            
+            // if the pointer information is inside data cache
+            bool PtrInsideDC();
+            
+            // if pointer is inside data cache, we need to go to data cache just to access data array.
+            void AccessDC();
+            
+            // if we meet a branch mispredction while doing a surcusive prefetch, we should stop prefetching.
+            void stopPref();
+            
 };
 #endif
