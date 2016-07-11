@@ -64,14 +64,14 @@ class LDSPrefetcher
       LDS_status  _status;
     /* pointer to L2 cache.*/
       L2cache  *l2cache;
-    /* pointer to the pattern table. */
-      Pattern_table  * _pattern_table;
-    /* pointer to the pattern table. */
-      TRB  * _trb;
-    /* pointer to the bitmap */
-      BQ   * _bq;
-    /* pointer to target_reg_bitmap TRB */
-      Dire_Pred   *_dire_pred;
+    /* entity of the pattern table. */
+      Pattern_table  _pattern_table;
+    /* entity of the pattern table. */
+      TRB   _trb;
+    /* entity of the bitmap */
+      BQ    _bq;
+    /* entity of target_reg_bitmap TRB */
+      Dire_Pred   _dire_pred;
 
     // STATS
     Stats::Scalar LDSpref_senttoL2;
