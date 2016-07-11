@@ -95,8 +95,8 @@ class Pattern_Table
             
 
      public:
-            Pattern_Table(int pattern_table_set, int pt_maxnumpointers);
-            ~Pattern_Table();
+            Pattern_Table(int pattern_table_set, int pt_maxnumpointers, TRB *trb, Dire_Pred *dp, lds_prefetcher *ldsp );
+            ~Pattern_Table() {};
             // insts after decode stage will access Pattern Table to update something in the corresponding entry
             // such as allocating a new entry, write the potential pointer and its dest reg and offset and so on.
             void DecodedInstAccess(DynInstPtr &inst);
