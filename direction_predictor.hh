@@ -90,8 +90,8 @@ class Direction_Predictor
             Stats::scalar  Dp_Pollution;
 
       public:
-            Direction_Predictor(const Direction_PredictorParams *params);
-            ~Direction_Predictor();
+            Direction_Predictor(unsigned  Dire_PredSize， unsigned  cache_block_size);
+            ~Direction_Predictor() {};
        
             // update the DP_array according to pred mode two entry or one entry
             void  update_array(unsigned addr, dp_entry dp_entry[2], bool two_mode);
