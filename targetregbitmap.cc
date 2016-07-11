@@ -38,19 +38,22 @@
 
 #include"mem/cache/ldsp/targetregbitmap"
 
-void Target_Reg_Bitmap::access_TRB(DynInstPtr &inst)
+void 
+Target_Reg_Bitmap::access_TRB(DynInstPtr &inst)
 {
      
 }
 
-void Target_Reg_Bitmap::EnqTRB_ToBQ(DynInstPtr &inst)
+void 
+Target_Reg_Bitmap::EnqTRB_ToBQ(DynInstPtr &inst)
 {
      if(inst is branch which may be mispred)
        _BQ.push_back(_TRB);
 }
 
 
-void Target_Reg_Bitmap::Deq_BQ(DynInstPtr &inst)
+void 
+Target_Reg_Bitmap::Deq_BQ(DynInstPtr &inst)
 {
      if(inst is a branch with mispred)
       { 
