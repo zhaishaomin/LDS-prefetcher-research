@@ -38,27 +38,25 @@
 
 #include"mem/cache/ldsp/ldsprefetcher.hh"
 
-std::string LDSPrefetcher::name()
+LDSPrefetcher(const LDSPrefetcherParams *p)
+{
+     // init child class
+     _trb(p->bitmap_size);
+     _pattern_table(p->pattern_table_set, p->pt_maxnumpointers, &_trb, &_dire_pred, this);
+     __dire_pred(p->dire_predsize,p->cache_block_size);
+     //set up child class
+     _trb.setPT(&_pattern_table);
+     
+}
+
+std::string 
+LDSPrefetcher::name()
 {
      return cpu->name() + ".LDSPrefetcher";
 }
-void  LDSPrefetcher::setPattern_Table(Pattern_Table *pattern_table)
-{
-     _pattern_table=pattern_table;
-}
-void  LDSPrefetcher::setTRB(TRB *trb)
-{ 
-     _trb=trb;
-}
-void  LDSPrefetcher::setBQ(BQ * bq)
-{
-     _bq=bq;
-}
-void  LDSPrefetcher::setDirection_Predictor(Dire_Pred * dire_pred)
-{
-     _dire_pred=dire_pred;
-}
-void  LDSPrefetcher::Regstats()
+
+void  
+LDSPrefetcher::Regstats()
 {
      LDSpref_senttoL2
         .name(name() + ".pref_senttoL2")
@@ -97,7 +95,8 @@ void  LDSPrefetcher::Regstats()
      
 }
 
-void  LDSPrefetcher::drainSanityCheck() const
+void  
+LDSPrefetcher::drainSanityCheck() const
 {
     /*
       assert(_pattern_table->pt_line.empty());
@@ -106,12 +105,14 @@ void  LDSPrefetcher::drainSanityCheck() const
   
 }
 
-void   LDSPrefetcher::isdrained() const
+void   
+LDSPrefetcher::isdrained() const
 {
      
 }
 
-void  LDSPrefetcher::takeoverfrom()
+void  
+LDSPrefetcher::takeoverfrom()
 { 
       
 }
