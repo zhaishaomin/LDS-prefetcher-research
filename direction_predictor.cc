@@ -62,29 +62,34 @@ Direction_Predictor::Direction_Predictor(const Direction_PredictorParams *params
      
 }
 
-unsigned  Direction_Predictor::calcu2DP_Eidx(unsigned addr)
+unsigned  
+Direction_Predictor::calcu2DP_Eidx(unsigned addr)
 {
      return (addr>>(1+cache_block_size))&Dire_PredMask;
 }
 
-unsigned  Direction_Predictor::calcu1DP_Eidx(unsigned addr)
+unsigned  
+Direction_Predictor::calcu1DP_Eidx(unsigned addr)
 {
      return (addr>>cache_block_size)&Dire_PredMask;
 }
 
-dp_entry  Direction_Predictor::getPrediction(unsigned addr )
+dp_entry  
+Direction_Predictor::getPrediction(unsigned addr )
 {
      unsigned index=calcu1DP_Eidx(addr);
      return dp_array[index];
 }
 
-void  Direction_Predictor::updateDP_array(unsigned addr, dp_entry _dp_entry)
+void  
+Direction_Predictor::updateDP_array(unsigned addr, dp_entry _dp_entry)
 {
      unsigned index=calcu1DP_Eidx(addr);
      assign_DP_entry(dp_array[index], _dp_entry);
 }
 
-void Direction_Predictor::assign_DP_entry(dp_entry &new_entry, dp_entry old_entry)
+void 
+Direction_Predictor::assign_DP_entry(dp_entry &new_entry, dp_entry old_entry)
 { 
      dp_array.pref1=old_entry.pref1;
      dp_array.pref2=old_entry.pref2;
@@ -92,14 +97,15 @@ void Direction_Predictor::assign_DP_entry(dp_entry &new_entry, dp_entry old_entr
      dp_array.pollution=old_entry.pollution;
 }
 
-Direction_Predictor*
+Direction_Predictor *
 Direction_PredictorParams::create()
 {
     return new Direction_Predictor(this);
 }
 
 // update the DP_array according to pred mode two entry or one entry
-void  Direction_Predictor::update_array(unsigned addr, dp_entry dp_entry[], bool two_mode)
+void  
+Direction_Predictor::update_array(unsigned addr, dp_entry dp_entry[], bool two_mode)
 {
     if(two_mode){
     unsigned  index1=calcu2DP_Eidx( addr);
@@ -112,7 +118,8 @@ void  Direction_Predictor::update_array(unsigned addr, dp_entry dp_entry[], bool
     }
 }
 // return the dp_entry result of prediction acording to the pred mode
-void  Direction_Predictor::getPrediction(unsigned addr, dp_entry &dp_entry[], bool two_mode)
+void  
+Direction_Predictor::getPrediction(unsigned addr, dp_entry &dp_entry[], bool two_mode)
 {
     if(two_mode){
      unsigned index1=calcu2DP_Eidx( addr);
