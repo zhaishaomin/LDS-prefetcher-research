@@ -77,25 +77,27 @@ class Pattern_Table
                 };
 
                struct PT_entry{
+                      // the entry is valid?
+                      bool valid;
                       // current base src reg of the load ,used to identify 
                       // whether the incoming inst is a load accessing something within the node
                       int src_base_reg ;
                       
                       // maxnum pointerfield 
-                      PointerField  pf[pt_pointerfield_maxnum];
+                      PointerField  pf[_pt_pointerfield_maxnum];
                 };
                
                std::vector<PT_entry>  pattern_table;
      private:
-            TRB *trb;
-            Dire_Pred *dp;
-            lds_prefetcher *ldsp;
+            TRB * trb;
+            Dire_Pred * dp;
+            lds_prefetcher * ldsp;
             // used to allocate anew entry for the potential lds 
             void allocNewEntry();
             
 
      public:
-            Pattern_Table(int pattern_table_set, int pt_maxnumpointers, TRB *trb, Dire_Pred *dp, lds_prefetcher *ldsp );
+            Pattern_Table(int _pattern_table_set, int _pt_maxnumpointers, TRB * _trb, Dire_Pred * _dp, lds_prefetcher * _ldsp );
             ~Pattern_Table() {};
             // insts after decode stage will access Pattern Table to update something in the corresponding entry
             // such as allocating a new entry, write the potential pointer and its dest reg and offset and so on.
