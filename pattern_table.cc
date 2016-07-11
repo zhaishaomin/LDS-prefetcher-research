@@ -38,7 +38,9 @@
 
 #include"mem/cache/ldsp/pattern_table.hh"
 
-void Pattern_Table::DecodedInstAccess(DynInstPtr &inst)
+
+void 
+Pattern_Table::DecodedInstAccess(DynInstPtr &inst)
 {
      if(inst is load)
      {
@@ -115,18 +117,21 @@ void Pattern_Table::DecodedInstAccess(DynInstPtr &inst)
 }
 
 
-void Pattern_Table::NewsFromL1D(DynInstPtr &inst)
+void 
+Pattern_Table::NewsFromL1D(DynInstPtr &inst)
 {
    
 }
 
-void Pattern_Table::NewsFromL2(DynInstPtr &inst)
+void 
+Pattern_Table::NewsFromL2(DynInstPtr &inst)
 {
 
 
 }
 
-PacketPtr  Pattern_Table::get_ptr_infos()
+PacketPtr  
+Pattern_Table::get_ptr_infos()
 {  
      if（!pointer->addr_valid&&pointer->pref）
      {
@@ -137,7 +142,8 @@ PacketPtr  Pattern_Table::get_ptr_infos()
      return ptr_access;
 }
 
-PacketPtr Pattern_Table::calculatePref()
+PacketPtr 
+Pattern_Table::calculatePref()
 {
      list<PT_entry>::Iterator pt_iter;
 
@@ -164,7 +170,8 @@ PacketPtr Pattern_Table::calculatePref()
 }
 
 
-void Pattern_table::updatePaddr(PointerField  * ptr, int paddr, PT_entry * pte)
+void 
+Pattern_table::updatePaddr(PointerField  * ptr, int paddr, PT_entry * pte)
 {
      
 }
