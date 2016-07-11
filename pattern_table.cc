@@ -162,3 +162,9 @@ PacketPtr Pattern_Table::calculatePref()
               }
      }
 }
+
+
+void Pattern_table::updatePaddr(PointerField  * ptr, int paddr, PT_entry * pte)
+{
+     
+}
