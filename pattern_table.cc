@@ -38,7 +38,27 @@
 
 #include"mem/cache/ldsp/pattern_table.hh"
 
+Pattern_Table::Pattern_Table(int _pattern_table_set, int _pt_maxnumpointers, TRB * _trb, Dire_Pred * _dp, lds_prefetcher * _ldsp )
+{
+     pattern_table_set=_pattern_table_set;
+     pt_maxnumpointers=_pt_maxnumpointers;
+     trb=_trb;
+     dp=_dp;
+     ldsp=_ldsp;
+     
+     DPRINTF(LDSP, "Pattern_Table: Creating Pattern_Table object.\n");
 
+     if (!isPowerOf2(pattern_table_set)) {
+         fatal("PT entries is not a power of 2!");
+     }
+ 
+     pattern_table.resize(pattern_table_set);
+ 
+     for (unsigned i = 0; i < pattern_table_set; ++i) {
+         pattern_table[i].valid = false;
+     }
+     
+}
 void 
 Pattern_Table::DecodedInstAccess(DynInstPtr &inst)
 {
