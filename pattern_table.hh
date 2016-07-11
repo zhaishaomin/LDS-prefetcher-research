@@ -85,7 +85,7 @@ class Pattern_Table
                       PointerField  pf[pt_pointerfield_maxnum];
                 };
                
-               std::list<PT_entry>  pattern_table;
+               std::vector<PT_entry>  pattern_table;
      private:
             TRB *trb;
             Dire_Pred *dp;
