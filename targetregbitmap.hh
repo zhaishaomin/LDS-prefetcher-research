@@ -45,6 +45,8 @@
 class Target_Reg_Bitmap 
 {
     public:
+           Target_Reg_Bitmap(int bitmap_size);
+           ~Target_Reg_Bitmap();
            /* a interface to do something about TRB depending on what kinds of insts we are process */
            void access_TRB(DynInstPtr &inst);
            /* we need to keep a checkpoint of current TRB if encountering a branch to enable rollbacking from mispred br */
@@ -53,6 +55,7 @@ class Target_Reg_Bitmap
            void Deq_BQ(DynInstPtr &inst);
            
     private:
+           const int bitmap_size;
            /* a load will set a bit of trb indexed by the dest_reg of the load */
            void Ld_Set_TRB(int  dest_reg_id);
            /* a non_load inst will reset a bit of trb indexed by the dest_reg of non_load inst */ 
@@ -60,8 +63,10 @@ class Target_Reg_Bitmap
            /* Move insts will move the value from previous load dest reg to current dest reg */ 
            void Move_Set_TRB(int src_reg_id, int dest_reg_id);
            typedef std::bitset<32> _trb;
+           
            std::bitset<32> _TRB;
            std::list<_trb>  _BQ;
+           
            
            //stats
            stats::scalar  BQFullcycles;
