@@ -104,6 +104,7 @@ class Pattern_Table
             TRB * trb;
             Dire_Pred * dp;
             lds_prefetcher * ldsp;
+            ImplCPU *cpu;
             // used to allocate anew entry for the potential lds 
             void allocNewEntry();
             
