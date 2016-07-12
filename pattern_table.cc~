@@ -269,9 +269,3 @@ Pattern_Table::needAccessTLB()
        }
    }
 }
-
-void 
-Pattern_Table::AccessTLB()
-{
-   
-}

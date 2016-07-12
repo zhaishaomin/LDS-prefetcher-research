@@ -132,7 +132,7 @@ class Pattern_Table
             void updatePaddr();
             
             // if we need to access DTLB to translate the virtual addr to physical addr
-            bool needAccessTLB();
+            bool needAcesTLB();
             
             // if we need to translate vaadr to paddr via DTLB, go to DTLB 
             void AccessTLB();

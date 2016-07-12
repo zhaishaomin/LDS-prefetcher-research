@@ -36,79 +36,83 @@
 * Author:zhaishaomin
 */
 
-#ifndef __MEM_CACHE_LDSP_LDSPREFETCH_HH__
-#define __MEM_CACHE_LDSP_LDSPREFETCH_HH__
+#include"mem/cache/ldsp/ldsprefetcher.hh"
 
-#include  <list>
-#include "params/LdsPrefetcher.hh"
-
-class LDSPrefetcher
+LDSPrefetcher(const LDSPrefetcherParams *p)
 {
-    protected:
-    struct DeferredPacket {
-        Tick tick;
-        PacketPtr pkt;
-        DeferredPacket(Tick t, PacketPtr p) : tick(t), pkt(p) {}
-    };
-
-    std::list<DeferredPacket> pfq;
-
-    public:
-      enum LDS_status{
-        Active,
-        Inactive
-    };
- 
-    private:
-    /* LDS_prefetcher status*/
-      LDS_status  _status;
-    /* pointer to L2 cache.*/
-      L2cache  *l2cache;
-    /* entity of the pattern table. */
-      Pattern_table  _pattern_table;
-    /* entity of the pattern table. */
-      TRB   _trb;
-    /* entity of the bitmap */
-      BQ    _bq;
-    /* entity of target_reg_bitmap TRB */
-      Dire_Pred   _dire_pred;
-
-    // STATS
-    Stats::Scalar LDSpref_senttoL2;
-    Stats::Scalar LDSpref_useful;
-    Stats::Scalar LDSpref_LateToUse;
-    Stats::Scalar LDSDemandMissCausedByPref;
-    Stats::Scalar LDSTotalDemandMiss;
-    Stats::Scalar LDSPref_BQFullcycles;
-    Stats::Scalar LDSPref_Squashcycles;
-    public:
-      LDSPrefetcher(const LDSPrefetcherParams *p);
-       ~LDSPrefetcher();
+     // init child class
+     _trb(p->bitmap_size);
+     _pattern_table(p->pattern_table_set, p->pt_maxnumpointers, &_trb, &_dire_pred, this);
+     __dire_pred(p->dire_predsize,p->cache_block_size);
+     //set up child class
+     _trb.setPT(&_pattern_table);
      
-      std::string name() const;
-     // void  setstats();
-     // void  setPattern_Table(Pattern_Table *pattern_table);
-     // void  setTRB(TRB *trb);
-     // void  setBQ(BQ * bq);
-     // void  setDirection_Predictor(Dire_Pred * dire_pred);
+}
 
-      void  drainsanitycheck() const;
-      void  isdrained() const;
-      void  takeoverfrom();
-      void  squash(const InstSeqNum  &squash_seq_num,
-                         ThreadID tid);
-      void  dumpHistory();
-   
-      //call pattern_table
-      bool needAccessTLB();
+std::string 
+LDSPrefetcher::name()
+{
+     return cpu->name() + ".LDSPrefetcher";
+}
+
+void  
+LDSPrefetcher::Regstats()
+{
+     LDSpref_senttoL2
+        .name(name() + ".pref_senttoL2")
+        .desc("Number of prefs sent to L2 cache")
+        .prereq(ldspref_senttoL2);
+
+     LDSpref_useful
+        .name(name() + ".pref_useful")
+        .desc("Number of prefs useful")
+        .prereq(LDSpref_useful);
+
+     LDSpref_LateToUse
+        .name(name() + ".pref_LateToUse")
+        .desc("Number of prefs late To Use")
+        .prereq(LDSpref_LateToUse);
+
+     LDSDemandMissCausedByPref
+        .name(name() + ".DemandMissCausedByPref")
+        .desc("Number of DemandMiss Caused By Prefetch")
+        .prereq(LDSDemandMissCausedByPref);
+
+     LDSTotalDemandMiss
+        .name(name() + ".TotalDemandMiss")
+        .desc("Number of Total DemandMiss")
+        .prereq(LDSTotalDemandMiss);
+
+     LDSPref_BQFullcycles
+        .name(name() + ".Pref_BQFullcycles")
+        .desc("Number of cycles that BQ is Full!")
+        .prereq(LDSPref_BQFullcycles);
+
+     LDSPref_Squashcycles
+        .name(name() + ".pref_Squashcycles")
+        .desc("Number  of cycles that lds_pref is Squashed!")
+        .prereq(LDSPref_Squashcycles);
+     
+}
+
+void  
+LDSPrefetcher::drainSanityCheck() const
+{
+    /*
+      assert(_pattern_table->pt_line.empty());
+      assert(_bq->_BQ.empty());
+    */  
   
-      void AccessTLB();
+}
 
-      //commem for prefetchers
-      Tick  notyfy(const PacketPtr &pkt);
-      PacketPtr getPacket();
-      void  Regstats();
-      void  calculatePrefetch(const PacketPtr &pkt, std::vector<Addr> &addresses );
-  };
-#endif
+void   
+LDSPrefetcher::isdrained() const
+{
+     
+}
+
+void  
+LDSPrefetcher::takeoverfrom()
+{ 
       
+}

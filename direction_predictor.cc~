@@ -118,7 +118,6 @@ Direction_Predictor::update_array(unsigned addr, dp_entry dp_entry[], bool two_m
     updateDP_array(addr,dp_entry[0]);
     }
 }
-
 // return the dp_entry result of prediction acording to the pred mode
 void  
 Direction_Predictor::getPrediction(unsigned addr, dp_entry &dp_entry[], bool two_mode)
@@ -132,14 +131,3 @@ Direction_Predictor::getPrediction(unsigned addr, dp_entry &dp_entry[], bool two
      dp_entry[0]=getPrediction(addr);
     }
 } 
-
-//return if the cache block is still inside the data cache, according to pred mode, one (true)or two(false)
-bool 
-Direction_Predictor::PtrInsideDC(int addr, bool one_mode)
-{
-    unsigned evictionIDX==calcu1DP_Eidx(addr);
-    
-    bool inside=dp_array[evictionIDX];
-   
-    return inside;
-}

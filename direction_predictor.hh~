@@ -101,8 +101,8 @@ class Direction_Predictor
             // return the dp_entry result of prediction acording to the pred mode
             void  getPrediction(unsigned addr, dp_entry &dp_entry[2], bool two_mode); 
  
-            //return if the cache block is still inside the data cache, according to pred mode, one (true)or two(false)
-            bool PtrInsideDC(int addr, bool one_mode);
+            //return if the cache block is still inside the data cache
+            bool PtrInsideDC(int addr);
 
 };
 #endif

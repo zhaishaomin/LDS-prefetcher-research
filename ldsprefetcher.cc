@@ -116,3 +116,16 @@ LDSPrefetcher::takeoverfrom()
 { 
       
 }
+
+void
+LDSPrefetcher::needAccessTLB()
+{ 
+   pt->needAccessTLB();
+}
+
+
+void
+LDSPrefetcher::AccessTLB()
+{
+   pt->AccessTLB();
+}
