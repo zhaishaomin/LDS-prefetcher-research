@@ -92,6 +92,7 @@ class Pattern_Table
             TRB * trb;
             Dire_Pred * dp;
             lds_prefetcher * ldsp;
+            ImplCPU *cpu;
             // used to allocate anew entry for the potential lds 
             void allocNewEntry();
             
@@ -122,7 +123,7 @@ class Pattern_Table
             void updatePaddr();
             
             // if we need to access DTLB to translate the virtual addr to physical addr
-            bool needAcesTLB();
+            bool needAccessTLB();
             
             // if we need to translate vaadr to paddr via DTLB
             void AccessTLB();
