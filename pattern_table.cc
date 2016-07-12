@@ -273,5 +273,21 @@ Pattern_Table::needAccessTLB()
 void 
 Pattern_Table::AccessTLB()
 {
-   
+      Request * req=(asid, addr, size, flags, masterId(), this->pc.instAddr(),
+                          thread->contextId(), threadNumber);
+      Request * sreqLow=NULL;
+      Request * sreqHigh=NULL;
+      
+      initiateTranslation(req, sreqLow, sreqHigh, NULL, BaseTLB::Read);
+      
+      if(translationCompleted()&&fault==nofault&&PtrInsideDC())
+      {
+           AccessDC();
+      }
+}
+
+void 
+Pattern_Table::AccessDC()
+{
+     
 }
