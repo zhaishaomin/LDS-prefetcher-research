@@ -1,4 +1,4 @@
-/*****today is 2016/7/01 now is pm 23:03
+/*****today is 2016/7/01 now is pm 23:03************************/
 I want to record my step of this project, computer architecture research!
 
 First,  I have done the most of work about encoding code. and the frame 
@@ -86,7 +86,7 @@ fourth, how can i launch a LDSPrefetch in the getNEXTMSHR() functon of
 
 
 
-/********today is 2016/7/2, now is at pm 23:35
+/********today is 2016/7/2, now is at pm 23:35*********************/
 Fifth  today I find that my LDSPrefetcher prepare a prefetch by using TLB, 
        in which case I should take cycle-occupied features into timing model.
        And I need to figure out how the TLB module is called during data 
@@ -100,7 +100,7 @@ Fifth  today I find that my LDSPrefetcher prepare a prefetch by using TLB,
        Having read the source code, I find it difficult to change the program to mimics the
        accurate cycle hehavior of cache access.
   
-/***********today is 2016/7/5 pm 18:11
+/***********today is 2016/7/5 pm 18:11********************/
  *         Mainly about interface between LDSP and DTLB
  * 
  * there are some qusetiones for accessing DTLB
@@ -130,7 +130,7 @@ Fifth  today I find that my LDSPrefetcher prepare a prefetch by using TLB,
  * 
  
  Solution! 
- /*********2016/7/5  pm 22:34
+ /*********2016/7/5  pm 22:34*****************/
   * There will be a list of interfaces between LDS_prefetcher and original GEM5
   *
   *
@@ -189,3 +189,21 @@ Case 2: the data cache is one cycle latency.
         In this case, the LDSP can issue a pointer infos access and DTLB access.
 (eg: intel core i7 four cycles latencies, pipelined)
         
+/*********************** today is 2016/7/13, now PM 20:23 at library*********************/
+these days I have update many files of the code resource, and become more clear about how to
+implement the initialization of ptrinfos access to L1 or L2, the solution is shown below!
+
+case 1: if ptrinfos is pred inside the data cache, and actually inside the DC, do DTLB access then do data access,
+           finally the LSDP get ptrinfos from data cache.
+
+case 2: if ptrinfos is pred inside the DC, but actually not inside the DC, do DTLB access then do data access,
+           find a L1 miss, then go to low memory level to get the data, 
+           finally the LDSP get the ptrinfos via L1 MSHR.
+
+case 3: if ptrinfosis pred not inside the DC, then we need to use getPacket() in L1 MSHR to launch a LDS prefetch to low level memory,
+           finally the LDSP get the ptr via L1 MSHR.
+
+For convenience, I have to implement my custom 
+            1, LDSP_inst: to use translation functions easily.
+            2, Packet, request, Datatranslation: tosupport LDSP packet, request, translation;
+            3, MSHR: to support LDSP prefetch type.
