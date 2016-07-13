@@ -289,5 +289,23 @@ Pattern_Table::AccessTLB()
 void 
 Pattern_Table::AccessDC()
 {
-     
+     lsq_unit[threadID]->incUsedPort();
+     if (!dcachePort->sendTimingReq(fst_data_pkt)) {
+         successful_load = false;
+     } else if (TheISA::HasUnalignedMemAcc && sreqLow) {
+         completedFirst = true;
+         // The first packet was sent without problems, so send this one
+         // too. If there is a problem with this packet then the whole
+         // load will be squashed, so indicate this to the state object.
+         // The first packet will return in completeDataAccess and be
+         // handled there.
+         ++usedPorts;
+         if (!dcachePort->sendTimingReq(snd_data_pkt)) {
+             // The main packet will be deleted in completeDataAccess.
+             state->complete();
+             // Signify to 1st half that the 2nd half was blocked via state
+             state->cacheBlocked = true;
+             successful_load = false;
+         }
+     }
 }
